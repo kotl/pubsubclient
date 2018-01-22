@@ -1,7 +1,7 @@
 sudo: true
 language: cpp
 compiler:
- - gcc-4.7
+ - g++-4.8
 before_install:
  # What is the current file size max for core files?
  # It is usually 0, which means no core file will be dumped if there is a crash 
