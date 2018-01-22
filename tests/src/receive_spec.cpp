@@ -20,10 +20,12 @@ void reset_callback() {
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
+    IT("Got callback");
     callback_called = true;
     strcpy(lastTopic,topic);
     memcpy(lastPayload,payload,length);
     lastLength = length;
+    IT("callback ended");
 }
 
 int test_receive_callback() {

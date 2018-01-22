@@ -562,6 +562,13 @@ PubSubClient& PubSubClient::setBufSize(uint16_t bufSize) {
     return *this;
 }
 
+PubSubClient::~PubSubClient() {
+    if (this->buffer != NULL) {
+        delete[] this->buffer;
+    }   
+}
+
+
 PubSubClient& PubSubClient::setServer(uint8_t * ip, uint16_t port) {
     IPAddress addr(ip[0],ip[1],ip[2],ip[3]);
     return setServer(addr,port);

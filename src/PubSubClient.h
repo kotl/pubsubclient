@@ -94,6 +94,7 @@ private:
    int _state;
 public:
    PubSubClient();
+   virtual ~PubSubClient();
 
    PubSubClient(uint16_t bufSize);
    PubSubClient(Client& client);
