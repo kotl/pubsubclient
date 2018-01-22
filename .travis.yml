@@ -1,7 +1,7 @@
 sudo: true
 language: cpp
 compiler:
-  - g++
+ - gcc-4.7
 before_install:
  # What is the current file size max for core files?
  # It is usually 0, which means no core file will be dumped if there is a crash 
@@ -26,7 +26,7 @@ script:
        - RESULT=0
        - cd tests && make 
        - sudo bash -c "echo '/tmp/logbt-coredumps/core.%p.%E' > /proc/sys/kernel/core_pattern"
-       - make test
+       - cd tests && make test
        - if [[ ${RESULT} != 139 ]]; then echo "expected segfault and 139 exit but instead exited with ${RESULT}" && exit 1; fi;
 os:
   - linux
