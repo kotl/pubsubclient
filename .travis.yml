@@ -12,7 +12,6 @@ before_install:
  - cat /etc/default/apport
  - service --status-all || true
  - initctl list || true
-dist: precise
 script: 
        # install mason
        - mkdir ./mason/
