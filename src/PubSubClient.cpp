@@ -6,76 +6,91 @@
 
 #include "PubSubClient.h"
 #include "Arduino.h"
+#include "trace2.h"
 
 PubSubClient::PubSubClient()
-  :PubSubClient(NULL, NULL, NULL, MQTT_MAX_PACKET_SIZE) {}
+  :PubSubClient(NULL, NULL, NULL, MQTT_MAX_PACKET_SIZE) {
+  TRACE("client created 1");
+}
 
 PubSubClient::PubSubClient(Client& client, uint16_t bufSize)
-  :PubSubClient(NULL, &client, NULL, bufSize) {}
+  :PubSubClient(NULL, &client, NULL, bufSize) {
+  TRACE("client created 2");
+}
 
 PubSubClient::PubSubClient(uint16_t bufSize)
-  :PubSubClient(NULL, NULL, NULL, bufSize) {}
+  :PubSubClient(NULL, NULL, NULL, bufSize) {
+  TRACE("client created 3");
+}
 
 PubSubClient::PubSubClient(Client& client)
-  :PubSubClient(NULL, &client, NULL, MQTT_MAX_PACKET_SIZE) {}
+  :PubSubClient(NULL, &client, NULL, MQTT_MAX_PACKET_SIZE) {   TRACE("client created 4");
+}
 
 
 PubSubClient::PubSubClient(IPAddress addr, uint16_t port, Client& client)
-  :PubSubClient(addr, port, NULL, &client, NULL) {}
+  :PubSubClient(addr, port, NULL, &client, NULL) {   TRACE("client created 5");
+}
 
 PubSubClient::PubSubClient(IPAddress addr, uint16_t port, Client& client, Stream& stream)
-  :PubSubClient(addr, port, NULL, &client, &stream) {}
+  :PubSubClient(addr, port, NULL, &client, &stream) {   TRACE("client created 6");
+}
 
 PubSubClient::PubSubClient(IPAddress addr, uint16_t port, MQTT_CALLBACK_SIGNATURE, Client& client)
-  :PubSubClient(addr, port, callback, &client, NULL) {}
+  :PubSubClient(addr, port, callback, &client, NULL) {   TRACE("client created 7");
+}
 
 PubSubClient::PubSubClient(IPAddress addr, uint16_t port, MQTT_CALLBACK_SIGNATURE, Client& client, Stream& stream)
-  :PubSubClient(addr, port, callback, &client, &stream) {}
+  :PubSubClient(addr, port, callback, &client, &stream) {TRACE("client created 8");}
 
 
 PubSubClient::PubSubClient(uint8_t *ip, uint16_t port, Client& client)
-  :PubSubClient(ip, port, NULL, &client, NULL) {}
+  :PubSubClient(ip, port, NULL, &client, NULL) {TRACE("client created 9");}
 
 PubSubClient::PubSubClient(uint8_t *ip, uint16_t port, Client& client, Stream& stream)
-  :PubSubClient(ip, port, NULL, &client, &stream) {}
+  :PubSubClient(ip, port, NULL, &client, &stream) {TRACE("client created 10");}
 
 PubSubClient::PubSubClient(uint8_t *ip, uint16_t port, MQTT_CALLBACK_SIGNATURE, Client& client)
-  :PubSubClient(ip, port, callback, &client, NULL) {}
+  :PubSubClient(ip, port, callback, &client, NULL) {TRACE("client created 11");}
 
 PubSubClient::PubSubClient(uint8_t *ip, uint16_t port, MQTT_CALLBACK_SIGNATURE, Client& client, Stream& stream)
-  :PubSubClient(ip, port, callback, &client, &stream) {}
+  :PubSubClient(ip, port, callback, &client, &stream) {TRACE("client created 12");}
 
 
 
 PubSubClient::PubSubClient(const char* domain, uint16_t port, Client& client)
-  :PubSubClient(domain, port, NULL, &client, NULL) {}
+  :PubSubClient(domain, port, NULL, &client, NULL) {TRACE("client created 13");}
 
 PubSubClient::PubSubClient(const char* domain, uint16_t port, Client& client, Stream& stream)
-  :PubSubClient(domain, port, NULL, &client, &stream) {}
+  :PubSubClient(domain, port, NULL, &client, &stream) {TRACE("client created 14");}
 
 PubSubClient::PubSubClient(const char* domain, uint16_t port, MQTT_CALLBACK_SIGNATURE, Client& client)
-  :PubSubClient(domain, port, callback, &client, NULL) {}
+  :PubSubClient(domain, port, callback, &client, NULL) {TRACE("client created 15");}
 
 PubSubClient::PubSubClient(const char* domain, uint16_t port, MQTT_CALLBACK_SIGNATURE, Client& client, Stream& stream)
-  :PubSubClient(domain, port, callback, &client, &stream) {}
+  :PubSubClient(domain, port, callback, &client, &stream) {TRACE("client created 16");}
 
 
 PubSubClient::PubSubClient(const char* domain, uint16_t port, MQTT_CALLBACK_SIGNATURE,Client* client, Stream* stream) 
   :PubSubClient(callback, client, stream, MQTT_MAX_PACKET_SIZE) {
+  TRACE("client created 17");
   setServer(domain, port);
 }
 
 PubSubClient::PubSubClient(uint8_t *ip, uint16_t port, MQTT_CALLBACK_SIGNATURE,Client* client, Stream*)
   :PubSubClient(callback, client, stream, MQTT_MAX_PACKET_SIZE) {
+  TRACE("client created 18");
   setServer(ip, port);
 }
 
 PubSubClient::PubSubClient(IPAddress addr, uint16_t port, MQTT_CALLBACK_SIGNATURE,Client* client, Stream*)
   :PubSubClient(callback, client, stream, MQTT_MAX_PACKET_SIZE) {
+  TRACE("client created 19");
   setServer(addr, port);
 }
 
 PubSubClient::PubSubClient(MQTT_CALLBACK_SIGNATURE, Client* client, Stream* stream, uint16_t bufSize) {
+  TRACE("client created 20");
     this->_state = MQTT_DISCONNECTED;
     setCallback(callback);
     if (client != NULL) {
@@ -554,6 +569,7 @@ PubSubClient& PubSubClient::setSocketTimeout(uint16_t socketTimeout) {
 }
 
 PubSubClient& PubSubClient::setBufSize(uint16_t bufSize) {
+  TRACE("set buff size");
     if (this->buffer != NULL) {
         delete[] this->buffer;
     }
@@ -563,6 +579,7 @@ PubSubClient& PubSubClient::setBufSize(uint16_t bufSize) {
 }
 
 PubSubClient::~PubSubClient() {
+  TRACE("client deleted");
     if (this->buffer != NULL) {
         delete[] this->buffer;
     }   
@@ -570,11 +587,13 @@ PubSubClient::~PubSubClient() {
 
 
 PubSubClient& PubSubClient::setServer(uint8_t * ip, uint16_t port) {
+  TRACE("setServer 1");
     IPAddress addr(ip[0],ip[1],ip[2],ip[3]);
     return setServer(addr,port);
 }
 
 PubSubClient& PubSubClient::setServer(IPAddress ip, uint16_t port) {
+  TRACE("setServer 2");
     this->ip = ip;
     this->port = port;
     this->domain = NULL;
@@ -582,22 +601,26 @@ PubSubClient& PubSubClient::setServer(IPAddress ip, uint16_t port) {
 }
 
 PubSubClient& PubSubClient::setServer(const char * domain, uint16_t port) {
+  TRACE("setServer 3");
     this->domain = domain;
     this->port = port;
     return *this;
 }
 
 PubSubClient& PubSubClient::setCallback(MQTT_CALLBACK_SIGNATURE) {
+  TRACE("setCallback 1");
     this->callback = callback;
     return *this;
 }
 
 PubSubClient& PubSubClient::setClient(Client& client){
+  TRACE("setClient 1");
     this->_client = &client;
     return *this;
 }
 
 PubSubClient& PubSubClient::setStream(Stream& stream){
+  TRACE("setStream 1");
     this->stream = &stream;
     return *this;
 }
