@@ -91,7 +91,7 @@ PubSubClient::PubSubClient(IPAddress addr, uint16_t port, MQTT_CALLBACK_SIGNATUR
 
 PubSubClient::PubSubClient(MQTT_CALLBACK_SIGNATURE, Client* client, Stream* stream, uint16_t bufSize) {
   TRACE("client created 20");
-  TRACE("Stream : %d", stream);
+  TRACE(stream);
     this->_state = MQTT_DISCONNECTED;
     setCallback(callback);
     if (client != NULL) {
