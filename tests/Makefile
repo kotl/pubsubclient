@@ -18,8 +18,6 @@ clean:
 	@rm -rf ${OUT_PATH}
 
 test:
-	@bin/connect_spec
-	@bin/publish_spec
 	@bin/receive_spec
 	@bin/subscribe_spec
 	@bin/keepalive_spec
