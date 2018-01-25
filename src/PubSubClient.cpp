@@ -77,13 +77,13 @@ PubSubClient::PubSubClient(const char* domain, uint16_t port, MQTT_CALLBACK_SIGN
   setServer(domain, port);
 }
 
-PubSubClient::PubSubClient(uint8_t *ip, uint16_t port, MQTT_CALLBACK_SIGNATURE,Client* client, Stream*)
+PubSubClient::PubSubClient(uint8_t *ip, uint16_t port, MQTT_CALLBACK_SIGNATURE,Client* client, Stream* stream)
   :PubSubClient(callback, client, stream, MQTT_MAX_PACKET_SIZE) {
   TRACE("client created 18");
   setServer(ip, port);
 }
 
-PubSubClient::PubSubClient(IPAddress addr, uint16_t port, MQTT_CALLBACK_SIGNATURE,Client* client, Stream*)
+PubSubClient::PubSubClient(IPAddress addr, uint16_t port, MQTT_CALLBACK_SIGNATURE,Client* client, Stream* stream)
   :PubSubClient(callback, client, stream, MQTT_MAX_PACKET_SIZE) {
   TRACE("client created 19");
   setServer(addr, port);
@@ -91,7 +91,6 @@ PubSubClient::PubSubClient(IPAddress addr, uint16_t port, MQTT_CALLBACK_SIGNATUR
 
 PubSubClient::PubSubClient(MQTT_CALLBACK_SIGNATURE, Client* client, Stream* stream, uint16_t bufSize) {
   TRACE("client created 20");
-  TRACE(stream);
     this->_state = MQTT_DISCONNECTED;
     setCallback(callback);
     if (client != NULL) {
