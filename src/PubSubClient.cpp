@@ -288,14 +288,18 @@ uint16_t PubSubClient::readPacket(uint8_t* lengthLength) {
 }
 
 boolean PubSubClient::loop() {
+    TRACE("Loop begins");
     if (connected()) {
         unsigned long t = millis();
         if ((t - lastInActivity > keepAlive*1000UL) || (t - lastOutActivity > keepAlive*1000UL)) {
+            TRACE("Loop 1");
             if (pingOutstanding) {
+                TRACE("Loop 11");
                 this->_state = MQTT_CONNECTION_TIMEOUT;
                 _client->stop();
                 return false;
             } else {
+                TRACE("Loop 12");
                 buffer[0] = MQTTPINGREQ;
                 buffer[1] = 0;
                 _client->write(buffer,2);
@@ -304,22 +308,28 @@ boolean PubSubClient::loop() {
                 pingOutstanding = true;
             }
         }
+        TRACE("Loop 2");
         if (_client->available()) {
+            TRACE("Loop 21");
             uint8_t llen;
             uint16_t len = readPacket(&llen);
             uint16_t msgId = 0;
             uint8_t *payload;
             if (len > 0) {
+                TRACE("Loop 22");
                 lastInActivity = t;
                 uint8_t type = buffer[0]&0xF0;
                 if (type == MQTTPUBLISH) {
+                    TRACE("Loop 23");
                     if (callback) {
+                        TRACE("Loop 24");
                         uint16_t tl = (buffer[llen+1]<<8)+buffer[llen+2]; /* topic length in bytes */
                         memmove(buffer+llen+2,buffer+llen+3,tl); /* move topic inside buffer 1 byte to front */
                         buffer[llen+2+tl] = 0; /* end the topic as a 'C' string with \x00 */
                         char *topic = (char*) buffer+llen+2;
                         // msgId only present for QOS>0
                         if ((buffer[0]&0x06) == MQTTQOS1) {
+                            TRACE("Loop 3");
                             msgId = (buffer[llen+3+tl]<<8)+buffer[llen+3+tl+1];
                             payload = buffer+llen+3+tl+2;
                             callback(topic,payload,len-llen-3-tl-2);
@@ -332,15 +342,18 @@ boolean PubSubClient::loop() {
                             lastOutActivity = t;
 
                         } else {
+                            TRACE("Loop 32");
                             payload = buffer+llen+3+tl;
                             callback(topic,payload,len-llen-3-tl);
                         }
                     }
                 } else if (type == MQTTPINGREQ) {
+                    TRACE("Loop 41");
                     buffer[0] = MQTTPINGRESP;
                     buffer[1] = 0;
                     _client->write(buffer,2);
                 } else if (type == MQTTPINGRESP) {
+                    TRACE("Loop 42");
                     pingOutstanding = false;
                 }
             }

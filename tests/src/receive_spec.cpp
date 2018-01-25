@@ -13,17 +13,17 @@ char lastPayload[1024];
 unsigned int lastLength;
 
 void reset_callback() {
-    TRACE("reset_callback begin");
+    TRACE("reset_callback begin\n");
 
     callback_called = false;
     lastTopic[0] = '\0';
     lastPayload[0] = '\0';
     lastLength = 0;
-    TRACE("reset_callback end");
+    TRACE("reset_callback end\n");
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
-    IT("Got callback");
+    IT("Got callback\n");
     callback_called = true;
     strcpy(lastTopic,topic);
     memcpy(lastPayload,payload,length);
@@ -35,28 +35,28 @@ int test_receive_callback() {
     IT("receives a callback message");
     reset_callback();
 
-    TRACE("Create shim client");
+    TRACE("Create shim client\n");
     ShimClient shimClient;
-    TRACE("set allow connect");
+    TRACE("set allow connect\n");
     shimClient.setAllowConnect(true);
 
     byte connack[] = { 0x20, 0x02, 0x00, 0x00 };
-    TRACE("respond");
+    TRACE("respond\n");
     shimClient.respond(connack,4);
 
-    TRACE("create client");
+    TRACE("create client\n");
     PubSubClient client(server, 1883, callback, shimClient);
-    TRACE("connect");
+    TRACE("connect\n");
     int rc = client.connect((char*)"client_test1");
     IS_TRUE(rc);
 
     byte publish[] = {0x30,0xe,0x0,0x5,0x74,0x6f,0x70,0x69,0x63,0x70,0x61,0x79,0x6c,0x6f,0x61,0x64};
-    TRACE("respond");
+    TRACE("respond\n");
     shimClient.respond(publish,16);
 
-    TRACE("loop");
+    TRACE("loop\n");
     rc = client.loop();
-    TRACE("loop end");
+    TRACE("loop end\n");
 
     IS_TRUE(rc);
 
