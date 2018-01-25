@@ -91,6 +91,7 @@ PubSubClient::PubSubClient(IPAddress addr, uint16_t port, MQTT_CALLBACK_SIGNATUR
 
 PubSubClient::PubSubClient(MQTT_CALLBACK_SIGNATURE, Client* client, Stream* stream, uint16_t bufSize) {
   TRACE("client created 20");
+  TRACE("Stream : %d", stream);
     this->_state = MQTT_DISCONNECTED;
     setCallback(callback);
     if (client != NULL) {
@@ -98,6 +99,7 @@ PubSubClient::PubSubClient(MQTT_CALLBACK_SIGNATURE, Client* client, Stream* stre
     }  else {
       	this->_client = NULL;
     }
+
     if (stream != NULL) {
       	setStream(*stream);
     } else {
@@ -238,6 +240,7 @@ boolean PubSubClient::readByte(uint8_t * result, uint16_t * index){
 }
 
 uint16_t PubSubClient::readPacket(uint8_t* lengthLength) {
+    TRACE("readPacket begins");
     uint16_t len = 0;
     if(!readByte(buffer, &len)) return 0;
     bool isPublish = (buffer[0]&0xF0) == MQTTPUBLISH;
